@@ -70,7 +70,7 @@ public class FindNearestServlet extends HttpServlet {
 		        htmlResponse += "</html>";
 		        // Return response
 		        writer.println(htmlResponse);
-}
+	}
 
 	public static RTreeNode_GlobalScale CreateRTree(HashMap<String, HashMap<String, ArrayList>> mapData) {
 		// Root of treec

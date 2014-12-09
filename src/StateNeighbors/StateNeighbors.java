@@ -15,7 +15,7 @@ public class StateNeighbors {
 	
 	public static Multimap<String, String> stateNeighbors;
 	
-	public StateNeighbors(){
+	public StateNeighbors() {
 		stateNeighbors = ArrayListMultimap.create();
 		loadStateNeighbors();
 	}
@@ -24,8 +24,7 @@ public class StateNeighbors {
 		loadStateNeighbors();
 	}
 	
-	private static void loadStateNeighbors(){
-		
+	private static void loadStateNeighbors() {
 		stateNeighbors = ArrayListMultimap.create();
 		
 		// Add all states and their neighbors to multimap "stateNeighbors"
@@ -361,6 +360,6 @@ public class StateNeighbors {
 				System.out.println(countkey + ": " + stateNeighbors.get(key));
 			}*/
 		}
-		System.out.println("Finished.");
+	System.out.println("Finished.");
 	}
 }

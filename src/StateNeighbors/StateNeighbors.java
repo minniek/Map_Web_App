@@ -351,15 +351,17 @@ public class StateNeighbors {
 		stateNeighbors.put("WY", "UT");
 		
 		// Print entries
+		/*
 		System.out.println("Displaying states and their neighbors...");
 		Set<String> keys = stateNeighbors.keySet();
 		for (String key: keys) {
-			System.out.println(key + ": " + stateNeighbors.get(key));
+			//System.out.println(key + ": " + stateNeighbors.get(key));
 			// Testing...
-			/*if (key.contains("MA")) {
+			if (key.contains("MA")) {
 				System.out.println(countkey + ": " + stateNeighbors.get(key));
-			}*/
+			}
 		}
+		*/
 	System.out.println("Finished.");
 	}
 }

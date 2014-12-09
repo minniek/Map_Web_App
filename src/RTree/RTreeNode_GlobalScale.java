@@ -240,7 +240,6 @@ public class RTreeNode_GlobalScale {
 					if (this._Children.get(ii).getName().equals(name))
 					this._Children.remove(ii);
 				}
-				
 			}
 		}
 	}

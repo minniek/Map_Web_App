@@ -69,7 +69,6 @@
         margin-left: 0;
         margin-right: 0;
       }
-
       </style>
   </head>
     <script
@@ -84,8 +83,7 @@
       var longitude;
 
       // set map options and execute during load 
-      function initialize()
-      {
+      function initialize() {
         // initialize map options
         var mapOptions = {
           center: new google.maps.LatLng(39, -99), // starting coordinates
@@ -100,30 +98,10 @@
           google.maps.event.addListener(map, 'click', function(event) { getCoordinates(event.latLng) });
       }
 
-      // when user clicks on map, a marker will be placed and an infowindow will display the latitude and longitude coordinates 
+      // when user clicks on map, the coordinates will appear in the form fields in the top panel 
       function getCoordinates(location) {
-        /*
-        var marker = new google.maps.Marker({  
-          position: location, 
-          map: map
-        });
-        markers.push(marker); // add to array to delete later
-        
-        var infowindow = new google.maps.InfoWindow({ 
-          content: '<div id="content">' + '<h2 id="heading">Coordinates</h2>' + '<p><b>Latitude: </b>' + location.lat() + '<p><b>Longitude: </b> ' + location.lng() + '</div>' 
-        });
-        */
-        //infowindow.open(map, marker);
         document.form.latitude.value = location.lat();
         document.form.longitude.value = location.lng();
-      }
-
-      // Delete markers from map when "Delete Markers" button is clicked, located on top panel
-      function deleteMarkers() {
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(null);
-        }
-        markers= [];
       }
 
       // on load, execute the initialize function

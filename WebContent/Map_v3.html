@@ -77,15 +77,12 @@
     </script>
 
     <script>
-      // declare map variable and array to store markers (in order to delete)
       var map;
-      var markers = [];
       var latitude;
       var longitude;
 
       // set map options and execute during load 
-      function initialize()
-      {
+      function initialize() {
         // initialize map options
         var mapOptions = {
           center: new google.maps.LatLng(39, -99), // starting coordinates
@@ -100,30 +97,10 @@
           google.maps.event.addListener(map, 'click', function(event) { getCoordinates(event.latLng) });
       }
 
-      // when user clicks on map, a marker will be placed and an infowindow will display the latitude and longitude coordinates 
+      // when user clicks on map, the coordinates will appear in the form fields in the top panel 
       function getCoordinates(location) {
-        /*
-        var marker = new google.maps.Marker({  
-          position: location, 
-          map: map
-        });
-        markers.push(marker); // add to array to delete later
-        
-        var infowindow = new google.maps.InfoWindow({ 
-          content: '<div id="content">' + '<h2 id="heading">Coordinates</h2>' + '<p><b>Latitude: </b>' + location.lat() + '<p><b>Longitude: </b> ' + location.lng() + '</div>' 
-        });
-        */
-        //infowindow.open(map, marker);
         document.form.latitude.value = location.lat();
         document.form.longitude.value = location.lng();
-      }
-
-      // Delete markers from map when "Delete Markers" button is clicked, located on top panel
-      function deleteMarkers() {
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(null);
-        }
-        markers= [];
       }
 
       // on load, execute the initialize function
@@ -134,7 +111,6 @@
 <body>
   <div class="divTop" >
     <h1><center>EC 504 Map Project</h1>
-    <!--<input onclick="deleteMarkers();" type=button value="Delete Markers" style="position: relative; top:0px; left:1200px">-->
     <center><form name="form" method="post" action="FindNearestServlet">
       <p> Latitude: <input type="text" name="latitude" align="right"/> Longitude: <input type="text" name="longitude" align="right"/> How many results? Enter a number from 1 to 10: <input type="text" name="k"/></p>
     <center><input type="submit" value="Submit!" />

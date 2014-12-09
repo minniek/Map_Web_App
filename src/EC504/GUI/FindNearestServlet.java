@@ -63,7 +63,7 @@ public class FindNearestServlet extends HttpServlet {
 		        PrintWriter writer = response.getWriter();
 		        String htmlResponse = "<html>";
 		        htmlResponse += "<style type=\"text/css\"> body { font-size: 0.8em; font-family: sans-serif; margin-top: 0.1em; margin-left: 0; margin-right: 0;} </style>";
-		        htmlResponse += "<body>Original point was: " + y + ", " + x + "<br/>";      
+		        htmlResponse += "<body>Original coordinates: " + y + ", " + x + "<br/>";      
 		        htmlResponse += "The " + k + " nearest counties are: " + "<br/>";
 		        htmlResponse += pq.printQueue(k);
 		        htmlResponse += "</body>";

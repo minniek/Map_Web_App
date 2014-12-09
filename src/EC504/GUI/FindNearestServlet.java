@@ -34,7 +34,7 @@ public class FindNearestServlet extends HttpServlet {
 			x = (long) (x * 10000) / 10000.0;
 			y = (long) (y * 10000) / 10000.0;
 	 
-	        // Load map data
+	        	// Load map data
 			String myFile = getServletContext().getRealPath("NationalFile_StateProvinceDecimalLatLong.txt");
 			HashMap mapData_States = LoadMapData(myFile);
 			
@@ -61,6 +61,7 @@ public class FindNearestServlet extends HttpServlet {
 			
 			// Try priority queue
 			//pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", -104.98, 39.7516667);
+<<<<<<< HEAD
 			pqDistances pq = new pqDistances(mapData_States, 500, stateAbbrv, x, y);
 			
 		//  -------------------- Find this State's State Neighbors and their distances --------------------- 
@@ -100,6 +101,22 @@ public class FindNearestServlet extends HttpServlet {
 
 	        // Return response
 	        writer.println(htmlResponse);
+=======
+			pqDistances pq = new pqDistances(mapData_States, 100, stateAbbrv, x, y, k);
+			//pq.printQueue(k);
+			
+		        // HTML Response
+		        PrintWriter writer = response.getWriter();
+		        String htmlResponse = "<html>";
+		        htmlResponse += "<style type=\"text/css\"> body { font-size: 0.8em; font-family: sans-serif; margin-top: 0.1em; margin-left: 0; margin-right: 0;} </style>";
+		        htmlResponse += "<body>Original coordinates: " + y + ", " + x + "<br/>";      
+		        htmlResponse += "The " + k + " nearest counties are: " + "<br/>";
+		        htmlResponse += pq.printQueue(k);
+		        htmlResponse += "</body>";
+		        htmlResponse += "</html>";
+		        // Return response
+		        writer.println(htmlResponse);
+>>>>>>> 67e77ed3e63f81ffcb6904c7a034f8d4305062c3
 	}
 
 	public static RTreeNode_GlobalScale CreateRTree(HashMap<String, HashMap<String, ArrayList>> mapData) {
@@ -115,6 +132,7 @@ public class FindNearestServlet extends HttpServlet {
 	        	//System.out.println(current_state); // Prints out state
 	        	stateNode.setName(current_state.toString()); // Add state's name to node
 	        
+<<<<<<< HEAD
 	        	HashMap state_value = (HashMap) mapData.get(current_state); // Get internal state hashmap (counties and their dimensions)
 	        
 	        	// Iterate through all counties in state
@@ -144,6 +162,37 @@ public class FindNearestServlet extends HttpServlet {
 			        // Add state to root node
 			        rootNode.addChild(stateNode);
 		    	}
+=======
+			HashMap state_value = (HashMap) mapData.get(current_state); // Get internal state hashmap (counties and their dimensions)
+	        
+	        	// Iterate through all counties in state
+	        	for (Object current_county : state_value.keySet()) { 
+				//System.out.print("   - " + current_county); // Prints out county belonging to [this] state
+				// Get county's list of rectangular dimensions
+				ArrayList county_dimensions = (ArrayList) state_value.get(current_county); 
+				//System.out.print(" " + county_dimensions + "\n"); // Print out county's dimensions (points form)
+				
+				// Store coordinates. Note ArrayList points order: [x1, y1, x2, y2]
+				Double x1, x2, y1, y2;
+				
+				// If ArrayList does not have 4 points, skip county
+				if (county_dimensions.size() != 4) continue; 
+				
+				y2 = (Double) county_dimensions.get(0); // Get y2 = max latitude
+				x1 = (Double) county_dimensions.get(1); // Get x1 = min longitude 
+				y1 = (Double) county_dimensions.get(2); // Get y1 = min latitude
+				x2 = (Double) county_dimensions.get(3); // Get x2 = max longitude
+				
+				// Create county node: name, x1, x2, y1, y2
+				RTreeNode_GlobalScale countyNode = new RTreeNode_GlobalScale(current_county.toString(), x1, x2, y1, y2);
+				
+				// Add county to state
+				stateNode.addChild(countyNode);
+	        	}
+		        // Add state to root node
+		        rootNode.addChild(stateNode);
+	    	}
+>>>>>>> 67e77ed3e63f81ffcb6904c7a034f8d4305062c3
 	    rootNode.setName("Root: United States");
 	    return rootNode;
 	}

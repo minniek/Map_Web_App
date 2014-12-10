@@ -14,11 +14,11 @@ public class pqDistances
     private int size; // Max. size of priority queue
     private HashMap<String, HashMap<String, ArrayList>> States; // key ---> State, value ---> hashmap containing another hashmap of county (key) and the coordinates (value)
 
-    /* Priority Queue structure
-       @param size = size of the priority queue (i.e., max # of values the queue can hold)
-       @param state = state found from Rtree
-       @param latitude = origin point (x)
-       @param longitude = origin point (y)
+    /** Priority Queue structure
+       size = size of the priority queue (i.e., max # of values the queue can hold)
+       state = state found from Rtree
+       latitude = origin point (x)
+       longitude = origin point (y)
     */
     
     public pqDistances(){
@@ -79,7 +79,8 @@ public class pqDistances
             
             //Insert into the queue
             //addDistanceToQueue(distance);
-            queue.add(distance);
+            if (!queue.contains(distance))
+            	queue.add(distance);
             
             //Insert into hashmap to create a mapping between "queue" and "Counties"
             distance_mapping.put(distance, state + " " + county_name);
@@ -118,7 +119,26 @@ public class pqDistances
     	queue.add(distance);
     }
 
+    /*
     //Print top 'k' counties from the queue
+    public void printQueue(int k){
+         //PriorityQueue<Double> temp_queue = new PriorityQueue<Double>(size, comparator);
+         double d;
+         String county_name;
+         int counter = 0;
+         while ((queue.size() != 0) && (counter < k) ){
+              d = queue.remove();
+              
+              //Now find the distance 'd' in the hashmap to figure out which county 'distance' corresponds to
+              county_name = (String)distance_mapping.get(d);
+
+              System.out.println("County: " + county_name + "; distance: " + String.format("%.3g", d) + " km");
+              counter++;
+         }
+    }
+    */
+    
+  //Print top 'k' counties from the queue
     public String printQueue(int k) {
         // PriorityQueue<Double> temp_queue = new PriorityQueue<Double>(size, comparator);
         double d;
@@ -136,5 +156,26 @@ public class pqDistances
              counter++;
         }
 	return county_results;   
+   }
+    
+    /**
+     * Returns an arraylist of top 'k' counties and their count
+     * @param k	count
+     */
+    public ArrayList getStateAndCountyName(int k){
+        //PriorityQueue<Double> temp_queue = new PriorityQueue<Double>(size, comparator);
+        double d;
+        String county_name;
+        int counter = 0;
+        ArrayList topK = new ArrayList();
+        while ((queue.size() != 0) && (counter < k) ){
+             d = queue.remove();
+            
+             //Now find the distance 'd' in the hashmap to figure out which county 'distance' corresponds to
+             county_name = (String)distance_mapping.get(d);
+             topK.add(county_name);
+             counter++;
+        }
+        return topK;
    }
 }

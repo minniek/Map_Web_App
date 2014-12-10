@@ -14,7 +14,7 @@ public class MapData{
     
     protected static String filename;
     public HashMap<String, HashMap<String, ArrayList>> States = new HashMap<String,HashMap<String, ArrayList>>();
-    public HashMap<String, HashMap<String, Integer>> reliability = new HashMap<String, HashMap<String, Integer>>();
+    public static HashMap<String, HashMap<String, Integer>> reliability = new HashMap<String, HashMap<String, Integer>>();
     
     public MapData(String filename) throws IOException{
         MapData.filename = filename;
@@ -78,7 +78,9 @@ public class MapData{
                         //Add count to 'reliability' HashMap
                         HashMap Counties_Count = new HashMap<String, Integer>();
                         Counties_Count.put(county,1); //initialize count to 1
-                        this.reliability.put(state,Counties);
+
+                        this.reliability.put(state,Counties_Count);
+                        //this.reliability.put(state,Counties);
                     }
                     else {
 
@@ -96,19 +98,22 @@ public class MapData{
                             county_info.put(county, coordinates);
                             
                             //Initialize county count to 1
-                            county_count.put(county,1);
+                            county_count.put(county, 1);
                             this.reliability.put(state,county_count);
                         }
                         else{
                             
                             //Get the current count from the 'reliability' HashMap
+
+                        	//int current_count = (Integer)reliability.get(state).get(county);
+
                             int current_count = reliability.get(state).get(county);
+                            
                             current_count++; //increment current count by 1
                             
                             //Now update count
                             county_count.remove(county);
                             county_count.put(county,current_count);
-                            
                             this.reliability.put(state,county_count);
 
                             //Get the existing coordinates from the hashmap
@@ -190,6 +195,7 @@ public class MapData{
 
                         //Update
                         this.States.put(state, county_info);
+                        this.reliability.put(state,county_count);
                     }
                 
                 }
@@ -204,16 +210,6 @@ public class MapData{
         
         System.out.println("HashMap created.");
         
-        
-        //This prints out all the states. Leave this commented. Just for debugging purposes.
-        for (Object key: this.reliability.keySet()) {
-            System.out.println(key);
-            HashMap curr_key = (HashMap)this.reliability.get(key);
-            for (Object val: curr_key.keySet()){
-                System.out.println("   - " + val);
-            }
-        }
-        
     }
     
     private void saveFile() throws FileNotFoundException, IOException{
@@ -227,6 +223,10 @@ public class MapData{
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(this.States);
         oos.close();
+    }
+    
+    public static int getCount(String state, String county){
+    	return reliability.get(state).get(county);
     }
     
 }

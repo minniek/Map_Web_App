@@ -48,22 +48,22 @@ public class FindNearestServlet extends HttpServlet {
 			String stateAbbrv = null;
 			
 			pqDistances pq = new pqDistances();
+			pqDistances pqMajorityVote = new pqDistances();
 			
 			for (int ii = 0; ii < nodesContainingPoint.size(); ii++) {
 				// Get current state node
 				RTreeNode_GlobalScale currentStateNode = nodesContainingPoint.get(ii);
-				stateAbbrv = currentStateNode.getName(); // Get name of state (abbreviation)
+				stateAbbrv = currentStateNode.getName();											// Get name of state (abbreviation)
 				
 				if (stateAbbrv.equals("Root: United States")) continue;
-				//stateAbbrv = currentStateNode.getName(); // Get name of state (abbreviation)
 				
 				// Add distance calculations to PQ for this state
-    			//pq = new pqDistances(mapData_States, 1000, stateAbbrv, x, y);
     			pq.addAdditionalDistances(mapData_States, 10000, stateAbbrv, x, y);
+    			pqMajorityVote.addAdditionalDistances(mapData_States, 10000, stateAbbrv, x, y);
     			
     			//  -------------------- Find this State's State Neighbors and their distances --------------------- 
     			
-    			ArrayList<String> neighbors = new ArrayList<String>(); // Array to keep track this state's neighbors
+    			ArrayList<String> neighbors = new ArrayList<String>();								// Array to keep track this state's neighbors
     			
     			// Iterate through the State Neighbors list to find this state's neighbors
     			Set<String> keys = StateNeighbors.stateNeighbors.keySet();
@@ -83,16 +83,36 @@ public class FindNearestServlet extends HttpServlet {
     				
     				String neighborAbbrv = neighbors.get(jj).toString();							// Get current state neighbor's name
     				pq.addAdditionalDistances(mapData_States, 10000, neighborAbbrv, x, y);
+    				pqMajorityVote.addAdditionalDistances(mapData_States, 10000, neighborAbbrv, x, y);
     			}
-    			
-				//System.out.println(nodesContainingPoint.get(ii));
 			}
 			
 			// Display resulting nodes that contain the original coordinates or nearby
-			for (int ii = 0; ii < nodesContainingPoint.size(); ii++) {
+			/*for (int ii = 0; ii < nodesContainingPoint.size(); ii++) {
 				System.out.println("From recursive function. Nodes containing test point: " + nodesContainingPoint.get(ii).getName());
+			}*/
+
+			// Print results
+			//pq.printQueue(k);
+			ArrayList topK = pqMajorityVote.getStateAndCountyName(5);
+			System.out.println(topK);
+			
+			String[] StateCountyStringArray;
+			int max = 0;
+			String StateAndCountyWithMostPoints = "";
+			for (int ii = 0; ii < topK.size(); ii ++){
+				StateCountyStringArray = ((String) topK.get(ii)).split(" ");
+				String state = StateCountyStringArray[0];
+				String county = StateCountyStringArray[1];
+				//System.out.println(MapData.getCount(state, county));//getCount
+				if (MapData.getCount(state, county) > max){
+					max = MapData.getCount(state, county);
+					StateAndCountyWithMostPoints = state + ", " + county;
+				}
 			}
 			
+			System.out.println("You are in: " + StateAndCountyWithMostPoints + " with number of points: " + max);
+
 	        // HTML Response
 	        PrintWriter writer = response.getWriter();
 	        //String htmlResponse = "<!DOCTYPEhtml><html><head><style type=\"text/css\">body{font-size:0.8em;font-family:sans-serif;margin-top:0.1em;margin-left:0;margin-right:0}</style></head><script>alert(\"Original coordinates(latitude,longitude):\n\" y, x);</script><body></body></html>";
@@ -101,6 +121,7 @@ public class FindNearestServlet extends HttpServlet {
 	        htmlResponse += "<body><b>Original coordinates (latitude, longitude):</b> " + "(" + y +", " + x + ")" + "<br/>";      
 	        htmlResponse += "<p><b>The " + k + " nearest counties are:</b>" + "<br/>";
 	        htmlResponse += pq.printQueue(k);
+	        htmlResponse += "<p>Based on majority voting of the top five nearest counties, you are in: " + StateAndCountyWithMostPoints + " with number of points: " + max + "<br/>";
 	        htmlResponse += "</body>";
 	        htmlResponse += "</html>";
 

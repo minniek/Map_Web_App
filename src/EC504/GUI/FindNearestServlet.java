@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+
+import org.apache.tomcat.util.codec.binary.StringUtils;
+
 import LoadData.MapData;
 import RTree.RTreeNode_GlobalScale;
 import RTree.pqDistances;
@@ -26,10 +30,32 @@ public class FindNearestServlet extends HttpServlet {
       
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			// Store form fields and convert to appropriate data types
-			Double y = Double.parseDouble(request.getParameter("latitude"));
-			Double x = Double.parseDouble(request.getParameter("longitude"));
-			int k = Integer.parseInt(request.getParameter("k"));
+			Double y; //Double.parseDouble(request.getParameter("latitude"));
+			Double x; //= Double.parseDouble(request.getParameter("longitude"));
+			int k;// = Integer.parseInt(request.getParameter("k"));
 			
+			// If the user does not input a latitude, longtitude, or a value for k
+			try {
+				y = Double.parseDouble(request.getParameter("latitude"));
+			} catch(NumberFormatException e) {
+				y = 42.3581;
+			}
+			
+			try {
+				x = Double.parseDouble(request.getParameter("longitude"));
+			} catch(NumberFormatException e) {
+				x = -71.0636;
+			}
+			
+			try{
+				k = Integer.parseInt(request.getParameter("k"));
+				if (k < 1 || k > 10) {
+					k = 10;
+				}
+			} catch(NumberFormatException e) {
+			   k = 10;
+			}
+				
 			// Truncate original values to four decimal places (or will cause error in "pqDistances.java, line 38")
 			x = (long) (x * 10000) / 10000.0;
 			y = (long) (y * 10000) / 10000.0;

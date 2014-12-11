@@ -178,8 +178,4 @@ public class pqDistances
         }
         return topK;
    }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 7ef50aca702b0b3006cd48354dfb51b7eff2f105

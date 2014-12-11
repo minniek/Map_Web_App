@@ -34,7 +34,11 @@ public class FindNearestServlet extends HttpServlet {
 			Double x; //= Double.parseDouble(request.getParameter("longitude"));
 			int k;// = Integer.parseInt(request.getParameter("k"));
 			
+<<<<<<< HEAD
 			// If the user does not input a latitude, longtitude, or a value for k, set default values
+=======
+			// If the user does not input a latitude, longtitude, or a value for k
+>>>>>>> 7ef50aca702b0b3006cd48354dfb51b7eff2f105
 			try {
 				y = Double.parseDouble(request.getParameter("latitude"));
 			} catch(NumberFormatException e) {
